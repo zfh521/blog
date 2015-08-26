@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>注册成功 - 美乐印 - 一站式印品采购平台 - 名片、传单、画册、包装、手提袋、马克杯等</title>
+<link type="text/css" href="css/register.css" rel="stylesheet" />
+<link rel="shortcut icon" href="/favicon.ico"/>
+    <link rel="bookmark" href="/favicon.ico"/>
+</head>
+	
+<body style="height:100%;">
+<div style="position:absolute;height:100%;width:100%;background:white;bottom:0px;top:0px;">
+    <div class="bigImg"></div>
+    <div style="float:left;width:38%;height:100%;overflow-y: auto;overflow-x: hidden;">
+        <div class="wrapper">
+            <div id="header">
+                <div>
+                   <img src="img/logo-xx.png" name="logo" class="logo" />
+                </div>
+                <div class="content">欢迎注册</div>
+            </div>
+            <div class="progress ps3" style="margin-left:70px;">
+               <ul class="text clearfix">
+                  <li class="text1">提交信息</li>
+                  <li class="text2">邮箱验证</li>
+                  <li class="text3" style="margin-left:-2px;">注册成功</li>
+                  <li style="clear:both;"></li>
+               </ul>
+            </div>
+            <div id="mainbody" style="padding-left:70px;">
+                
+                <div style="margin-top:20px;">
+                  <img  src="./img/mailreceived.png" style="vertical-align:middle"/>
+                  <span id="msg" style="font-size:16px;color:#23ac38;">恭喜您已注册成功</span>
+                </div>
+                <div style="margin-top:20px;width:254px;font-size:12px;line-height:160%;">请在系统中及时完善企业信息，以便美乐印给您带来更完美的体验</div>
+                <div style="margin-top:20px;"><button class="checkMail" style="border:none;background:none;"><img src="./img/tiyan.png"/></button></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="js/register.js"></script>
+<script type="text/javascript">
+function GetQueryString(name){
+    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+    var r = window.location.search.substr(1).match(reg);
+    if(r!=null)return  unescape(r[2]); return null;
+}
+var status=GetQueryString("status");
+var message=GetQueryString("msg");
+if(status==0){
+	$("#msg").text("账户激活成功");
+}else{
+	$("#msg").text("账户激活失败");
+}
+$(".checkMail").on('click',function(){
+	window.open('./login.html','_parent');
+});
+</script>
+</body>
+</html>

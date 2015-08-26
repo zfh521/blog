@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="in.meile.account.mapper.AccountMapper">
+    <sql id="accountColumns">
+		  id,
+		  type,
+		  companyAccountId ,
+		  companyName ,
+		  name ,
+		  password ,
+		  contactPerson ,
+		  contactWay ,
+		  status ,
+		  created ,
+		  lastLogin ,
+		  lastmodify ,
+		  email,
+		  salt
+    </sql>
+	<select id="get" resultType="in.meile.account.domain.Account" >
+		SELECT 
+			<include refid="accountColumns"/> 
+		FROM  account
+		WHERE id = #{id}
+	</select>
+	<select id="getByMail" resultType="in.meile.account.domain.Account" parameterType="map" >
+		SELECT 
+			<include refid="accountColumns"/> 
+		FROM  account
+		WHERE email = #{email}
+	</select>
+	<select id="getByName" resultType="in.meile.account.domain.Account" >
+		SELECT 
+			<include refid="accountColumns"/> 
+		FROM  account
+		WHERE name = #{name}
+	</select>
+	<update id="updateAccountStatus">
+	   update  account set status=0,companyAccountId=#{id}
+	   where id=#{id}
+	</update>
+	<insert id="insert" parameterType="in.meile.account.domain.Account"  useGeneratedKeys="true"  keyProperty="id">
+	   insert into 
+	      account( type, companyAccountId ,  companyName , name ,password , contactPerson , 
+	      contactWay ,status , created , lastLogin ,lastmodify ,salt,email )
+	   values(1,#{companyAccountId} ,  #{companyName} , #{name} ,#{password} , #{contactPerson} , 
+	      #{contactWay} ,1 , now() , now() ,now() ,#{salt} ,#{email});
+	</insert>
+</mapper>

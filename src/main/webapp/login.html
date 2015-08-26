@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>登录 - 美乐印 - 一站式印品采购平台 - 名片、传单、画册、包装、手提袋、马克杯等</title>
+<link type="text/css" href="css/register.css" rel="stylesheet" />
+<link rel="shortcut icon" href="/favicon.ico"/>
+    <link rel="bookmark" href="/favicon.ico"/>
+</head>
+	
+<body style="height:100%;">
+<div style="position:absolute;height:100%;width:100%;background:white;bottom:0px;top:0px;">
+    <div class="bigImg"></div>
+    <div style="float:left;width:38%;height:100%;overflow-y: auto;overflow-x: hidden;">
+        <div class="wrapper">
+            <div id="header" style="margin-top:25%">
+                <div>
+                   <img src="img/logo-xx.png" name="logo" class="logo" />
+                </div>
+                <div class="content">欢迎登录</div>
+            </div>
+            <div id="mainbody" >
+            <form action="/url" method="post" class="formContent">
+                    <ul>
+                        <li>
+                            
+                            <div class="inputDiv">
+                                <input type="text" name="username"  placeholder="请输入用户名">
+                                <span class="icon"></span>
+                            </div>
+                            <span id="username"></span>
+                        </li>
+                        <li>
+                           
+                            <div class="inputDiv">
+                                <input type="password" name="password"  placeholder="请输入密码">
+                                <span class="icon"></span>
+                            </div>
+                            <span id="password"></span>
+                        </li>
+                       
+                    </ul>
+                </form>
+                <p id="error" style="margin-left: 70px;font-size:12px;color:red;display:none;">用户名或密码错误</p>
+                <div id="footer" style="width:250px;">
+                    <button type="button" style="cursor:pointer" id="loginBtn" value="立即注册" class="action">
+                         <img src="./img/dologin.png">
+                    </button>
+                    <p style="text-align:right;font-size:12px;">没有账号？<a href="register.html">立即注册</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="js/register.js"></script>
+<script type="text/javascript" src="/script/jquery.placeholder.min.js"></script>
+<script type="text/javascript">
+$(function(){ $('input, textarea').placeholder(); });
+$(function(){
+	$("#loginBtn").on('click',function(){
+		var password=$("input[name=password]").val();
+		var username=$("input[name=username]").val();
+		$.post("/adm/index.php/customer/user/ologin",{username:username,password:password},function(data){
+			console.log(data)
+			if("correct"==data){
+				location.href='/adm/index.php/customer/checkout';
+			}else{
+				$("#error").show();
+			}
+		})
+		
+	})
+});
+</script>
+</body>
+</html>
