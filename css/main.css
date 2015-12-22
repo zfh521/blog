@@ -1,0 +1,22 @@
+*{
+
+	box-sizing: border-box; 
+	*behavior: url(/css/boxsizing.htc);
+	 -ms-box-sizing: border-box; 
+	margin: 0px;
+	 margin: 0; padding: 0; border: 0;
+	border-width: 0px;
+	font-size: 12px;
+}
+.line{
+	border-top: 1px solid black;
+	height: 0px;
+	width: 1000px;
+	margin: auto;
+}
+.container{
+	width: 1000px;
+	padding: 10px;
+	background-color: #45ccab;
+	margin:auto auto;
+}
