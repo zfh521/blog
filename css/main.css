@@ -8,6 +8,19 @@
 	border-width: 0px;
 	font-size: 12px;
 }
+body{background-color: #f7f8fa}
+.topNav{
+	height: 33px;background-color: #e7e8ea;
+	line-height: 33px;
+	width: 989px;
+	margin: auto;
+}
+.mainNav
+,.main
+,.footer,.head{
+	width: 989px;
+	margin: auto;
+}
 .line{
 	border-top: 1px solid black;
 	height: 0px;
