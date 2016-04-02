@@ -1,2 +1,170 @@
-<!DOCTYPE html><html lang="en"><head><title></title><script type="text/javascript">if (foo) bar(1 + 5)</script></head><body><h1>Jade - node template engine</h1><div id="container" class="col"><p>Get on it!</p><p>Jade is a terse and simple templating language with a
-strong focus on performance and powerful features.</p></div></body></html>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Article Title</title>
+    <link href="/vendor/bootstrap/dist/css/bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="/public/app.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <div class="navbar navbar-default">
+      <div class="container">
+        <ul class="nav navbar-nav">
+          <li> <a href="/b/blog.html">博客</a></li>
+          <li> <a href="/b/travel.html">摄影</a></li>
+          <li> <a href="/b/travel.html">关于1`1</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container"><p><a href="https://travis-ci.org/phated/gulp-jade"><img src="https://travis-ci.org/phated/gulp-jade.png?branch=master" alt="Build Status"></a></p>
+<h2 id="information">Information</h2>
+<table>
+<tr>
+<td>Package</td><td>gulp-jade</td>
+</tr>
+<tr>
+<td>Description</td>
+<td>Compile Jade templates</td>
+</tr>
+<tr>
+<td>Node Version</td>
+<td>≥ 0.10</td>
+</tr>
+</table>
+
+<h2 id="usage">Usage</h2>
+<p>Compile to HTML</p>
+<pre><code class="lang-javascript">var jade = require(&#39;gulp-jade&#39;);
+
+gulp.task(&#39;templates&#39;, function() {
+  var YOUR_LOCALS = {};
+
+  gulp.src(&#39;./lib/*.jade&#39;)
+    .pipe(jade({
+      locals: YOUR_LOCALS
+    }))
+    .pipe(gulp.dest(&#39;./dist/&#39;))
+});
+</code></pre>
+<p>Compile to JS</p>
+<pre><code class="lang-javascript">var jade = require(&#39;gulp-jade&#39;);
+
+gulp.task(&#39;templates&#39;, function() {
+  gulp.src(&#39;./lib/*.jade&#39;)
+    .pipe(jade({
+      client: true
+    }))
+    .pipe(gulp.dest(&#39;./dist/&#39;))
+});
+</code></pre>
+<h2 id="options">Options</h2>
+<p>All options supported by the <a href="http://jade-lang.com/api/">Jade API</a> are supported</p>
+<p><strong>Note:</strong> <code>filename</code> option is taken from <code>path</code> property of incoming vinyl-file object. If you want to change it, use <a href="https://github.com/hparra/gulp-rename">gulp-rename</a> before <code>gulp-jade</code> with desired path.</p>
+<p>In addition, you can pass in a <code>locals</code> or <code>data</code> option that will be used as locals for your HTML compilation.  The <code>locals</code> option takes precedence over the <code>data</code> option, and both are overwritten by <code>data</code> on the vinyl file object (See &quot;Use with <code>gulp-data</code>&quot; below).</p>
+<p>If you want to use a different version of jade, or define jade filters, you can pass your own instance of jade as the <code>jade</code> option:</p>
+<pre><code class="lang-javascript">var jade = require(&#39;jade&#39;);
+var gulpJade = require(&#39;gulp-jade&#39;);
+var katex = require(&#39;katex&#39;);
+
+jade.filters.katex = katex.renderToString;
+jade.filters.shoutFilter = function (str) {
+  return str + &#39;!!!!&#39;;
+}
+
+gulp.task(&#39;jade&#39;, function () {
+  return gulp.src(&#39;public/**/*.jade&#39;)
+    .pipe(gulpJade({
+      jade: jade,
+      pretty: true
+    }))
+    .pipe(gulp.dest(&#39;public/&#39;))
+})
+</code></pre>
+<h2 id="use-with-gulp-data-https-www-npmjs-org-package-gulp-data-">Use with <a href="https://www.npmjs.org/package/gulp-data">gulp-data</a></h2>
+<p>The <code>gulp-data</code> plugin, is a standard method for piping data down-stream to other plugins that need data in the form of a new file property <code>file.data</code>. If you have data from a JSON file, front-matter, a database, or anything really, use <code>gulp-data</code> to pass that data to gulp-jade.</p>
+<p>Retrieve data from a JSON file, keyed on file name:</p>
+<pre><code class="lang-javascript">gulp.task(&#39;json-test&#39;, function() {
+  return gulp.src(&#39;./examples/test1.jade&#39;)
+    .pipe(data(function(file) {
+      return require(&#39;./examples/&#39; + path.basename(file.path) + &#39;.json&#39;);
+    }))
+    .pipe(jade())
+    .pipe(gulp.dest(&#39;build&#39;));
+});
+</code></pre>
+<p>Since gulp-data provides a callback, it means you can get data from a database query as well:</p>
+<pre><code class="lang-javascript">gulp.task(&#39;db-test&#39;, function() {
+  return gulp.src(&#39;./examples/test3.jade&#39;)
+    .pipe(data(function(file, cb) {
+      MongoClient.connect(&#39;mongodb://127.0.0.1:27017/gulp-data-test&#39;, function(err, db) {
+        if(err) return cb(err);
+        cb(undefined, db.collection(&#39;file-data-test&#39;).findOne({filename: path.basename(file.path)}));
+      });
+    }))
+    .pipe(jade())
+    .pipe(gulp.dest(&#39;build&#39;));
+});
+</code></pre>
+<p>If you want to use some static locals and some dynamic using gulp-data, the static locals will be overridden.
+Instead, you can extend in the gulp-data function:</p>
+<pre><code class="lang-javascript">var _ = require(&#39;lodash&#39;);
+
+var statics = {
+  my: &#39;statics&#39;,
+  foo: &#39;bar&#39;
+};
+
+gulp.task(&#39;json-test&#39;, function() {
+  return gulp.src(&#39;./examples/test1.jade&#39;)
+    .pipe(data(function(file) {
+      var json = require(&#39;./examples/&#39; + path.basename(file.path) + &#39;.json&#39;);
+      var data = _.assign({}, json, statics);
+      return data;
+    }))
+    .pipe(jade())
+    .pipe(gulp.dest(&#39;build&#39;));
+});
+</code></pre>
+<p>More info on <a href="https://www.npmjs.org/package/gulp-data">gulp-data</a></p>
+<h2 id="amd">AMD</h2>
+<p>If you are trying to wrap your Jade template functions in an AMD wrapper, use <a href="https://github.com/phated/gulp-wrap-amd"><code>gulp-wrap-amd</code></a></p>
+<pre><code class="lang-javascript">var jade = require(&#39;gulp-jade&#39;);
+var wrap = require(&#39;gulp-wrap-amd&#39;);
+
+gulp.task(&#39;templates&#39;, function() {
+  gulp.src(&#39;./lib/*.jade&#39;)
+    .pipe(jade({
+      client: true
+    }))
+    .pipe(wrap({
+      deps: [&#39;jade&#39;],
+      params: [&#39;jade&#39;]
+    }))
+    .pipe(gulp.dest(&#39;./dist/&#39;))
+});
+</code></pre>
+<h2 id="license">LICENSE</h2>
+<p>(MIT License)</p>
+<p>Copyright (c) 2013 Blaine Bublitz</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+&quot;Software&quot;), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+
+    </div>
+    <div class="footer line-t">
+      <div class="container text-center">copyright&copy;2016</div>
+    </div>
+  </body>
+</html>
